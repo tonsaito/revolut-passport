@@ -1,18 +1,35 @@
 # My Revolut Passport by Ayrton Saito
 This sample code will be my revolut passport to work in a amazing fintech in London, UK!
 
-# How to run
+## How to run
 For the usability purposes you can find the built revolut-passport.jar in the /build/libs directory
 
 ```bash
 java -jar /build/libs/revolut-passport.jar
 ```
 
+## Info
+
+Static code analysis: https://sonarcloud.io/dashboard?id=tonsaito_revolut-passport
+
+
+## Future improvements
+With only a few days to work on this project, I could not make everthing I wanted to make this project better, but here are some improvements that I would make:
+
+```
+- Install the coverage plugin for sonar
+- Reflection on on the DAO classes
+- External configuration (12Factor)
+- ETag validation (concurrency)
+- More tests, as always
+- JMeter Test (To validate concurrency and stress test)
+```
+
 ## Usage
 
-### GET http://localhost:8080/client/all
+#### GET http://localhost:8080/client/all
 
-**Response**
+**Sample Response**
 
 ```
 [
@@ -61,19 +78,42 @@ ___
 }
 ```
 
-**Response**
-```
+**Possible Responses**
 
+```
+[400] Invalid client FROM Account
+[400] Invalid client TO Account
+[400] Account From and account TO MUST be different
+[400] Invalid funds :(
+[400] Invalid amount of money
+[200] Money Exchange successfully completed!
 ```
 
 ___
 
 #### GET http://localhost:8080/exchange/history
-
-## Possible Improvements
-With only a few days to work on this project, I could not make everthing I wanted to make this project better, but here some improvements that I would make:
-
-Reflection on on the DAO classes
+```
+[
+    {
+        "accountFrom": "001",
+        "accountTo": "003",
+        "amount": 10,
+        "date": 1558915502477,
+        "id": 1,
+        "info": "",
+        "status": true
+    },
+    {
+        "accountFrom": "001",
+        "accountTo": "003",
+        "amount": 10,
+        "date": 1558915510461,
+        "id": 2,
+        "info": "",
+        "status": true
+    }
+]
+```
 
 ## License
 [GNU](https://www.gnu.org/licenses/gpl-3.0.pt-br.html)
