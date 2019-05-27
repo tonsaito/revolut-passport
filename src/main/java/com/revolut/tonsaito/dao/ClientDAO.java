@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.revolut.tonsaito.config.DBManager;
 import com.revolut.tonsaito.model.ClientModel;
 
 public class ClientDAO {
+	private static final Logger LOGGER = Logger.getLogger(ClientDAO.class);
 	public static final String tableSQL = "CREATE TABLE IF NOT EXISTS CLIENT " 
 			+ "(id INTEGER AUTO_INCREMENT PRIMARY KEY, " + " name VARCHAR(255), "
 			+ " account_number VARCHAR(255), account_balance FLOAT)";
@@ -55,15 +57,21 @@ public class ClientDAO {
 			while (rs.next()){
                 count = rs.getInt(1);
             }
+			rs.close();
 		} catch (SQLException se) {
-			se.printStackTrace();
+			LOGGER.error(se.getMessage(), se.getCause());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e.getCause());
 		} finally {
 			try {
-				if (stmt != null)
-					stmt.close();
+				if (rs != null) rs.close();
 			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
+			}
+			try {
+				if (stmt != null) stmt.close();
+			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
 			}
 		}
 		return count;
@@ -89,18 +97,21 @@ public class ClientDAO {
 			while (rs.next()) {
 				clientModelReturn = new ClientModel(rs.getInt("id"), rs.getString("name"), rs.getString("account_number"), rs.getBigDecimal("account_balance"));
 			}
+			rs.close();
 		} catch (SQLException se) {
-			se.printStackTrace();
+			LOGGER.error(se.getMessage(), se.getCause());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e.getCause());
 		} finally {
 			try {
-				if(rs != null) {
-					rs.close();
-				}
-				if (stmt != null)
-					stmt.close();
+				if (rs != null) rs.close();
 			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
+			}
+			try {
+				if (stmt != null) stmt.close();
+			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
 			}
 		}
 		return clientModelReturn;
@@ -125,18 +136,21 @@ public class ClientDAO {
 			while (rs.next()) {
 				list.add(new ClientModel(rs.getInt("id"), rs.getString("name"), rs.getString("account_number"), rs.getBigDecimal("account_balance")));
 			}
+			rs.close();
 		} catch (SQLException se) {
-			se.printStackTrace();
+			LOGGER.error(se.getMessage(), se.getCause());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e.getCause());
 		} finally {
 			try {
-				if(rs != null) {
-					rs.close();
-				}
-				if (stmt != null)
-					stmt.close();
+				if (rs != null) rs.close();
 			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
+			}
+			try {
+				if (stmt != null) stmt.close();
+			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
 			}
 		}
 		return list;
