@@ -5,11 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 public class DBManager {
+	private static final Logger LOGGER = Logger.getLogger(DBManager.class);
 	static final String JDBC_DRIVER = "org.h2.Driver";
 	static final String DB_URL = "jdbc:h2:./data/sample";
 	static final String USER = "sa";
-	static final String PASS = "";
+	static final String PASS = "revolut";
 	static Connection conn = null;
 
 	private DBManager() {
@@ -39,14 +42,15 @@ public class DBManager {
 			stmt.close();
 			closeConn();
 		} catch (SQLException se) {
-			se.printStackTrace();
+			LOGGER.error(se.getMessage(), se.getCause());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e.getCause());
 		} finally {
 			try {
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
 			}
 		}
 		return executeReturn;
@@ -63,14 +67,15 @@ public class DBManager {
 			stmt.close();
 			closeConn();
 		} catch (SQLException se) {
-			se.printStackTrace();
+			LOGGER.error(se.getMessage(), se.getCause());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e.getCause());
 		} finally {
 			try {
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
 			}
 		}
 		return executeReturn;
