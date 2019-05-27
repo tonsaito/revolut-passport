@@ -1,0 +1,9 @@
+### Java ###
+*.class
+
+.gradle
+/build/
+/bin/
+/build/
+/data
+/tomcat.8080
