@@ -35,11 +35,11 @@ public class ClientDAO {
 
 	public static void generateData() {
 		if(ClientDAO.count() == 0) {
-			insert("Tony Stark", "001", new BigDecimal(1000000.00));
-			insert("Bruce Wayne", "002", new BigDecimal(2500000.00f));
-			insert("Peter Parker", "003", new BigDecimal(300.00));
-			insert("Thanos", "004", new BigDecimal(50.00));
-			insert("Dr Strange", "005", new BigDecimal(80000.00));
+			insert("Tony Stark", "001", BigDecimal.valueOf(1000000.00));
+			insert("Bruce Wayne", "002", BigDecimal.valueOf(2500000.00f));
+			insert("Peter Parker", "003", BigDecimal.valueOf(300.00));
+			insert("Thanos", "004", BigDecimal.valueOf(50.00));
+			insert("Dr Strange", "005", BigDecimal.valueOf(80000.00));
 			System.out.println("Clients data was generated successfully!");
 		}
 	}
@@ -55,7 +55,6 @@ public class ClientDAO {
 			while (rs.next()){
                 count = rs.getInt(1);
             }
-			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
@@ -90,13 +89,15 @@ public class ClientDAO {
 			while (rs.next()) {
 				clientModelReturn = new ClientModel(rs.getInt("id"), rs.getString("name"), rs.getString("account_number"), rs.getBigDecimal("account_balance"));
 			}
-			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
+				if(rs != null) {
+					rs.close();
+				}
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException se2) {
@@ -124,13 +125,15 @@ public class ClientDAO {
 			while (rs.next()) {
 				list.add(new ClientModel(rs.getInt("id"), rs.getString("name"), rs.getString("account_number"), rs.getBigDecimal("account_balance")));
 			}
-			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
+				if(rs != null) {
+					rs.close();
+				}
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException se2) {

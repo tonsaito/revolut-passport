@@ -39,13 +39,15 @@ public class TransactionDAO {
 			while (rs.next()){
                 count = rs.getInt(1);
             }
-			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
+				if(rs != null) {
+					rs.close();
+				}
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException se2) {
@@ -65,13 +67,15 @@ public class TransactionDAO {
 			while (rs.next()) {
 				list.add(new TransactionModel(rs.getInt("id"), rs.getString("account_from"), rs.getString("account_to"), rs.getBigDecimal("amount"), rs.getTimestamp("date"), rs.getBoolean("status"), rs.getString("info")));
 			}
-			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
+				if(rs != null) {
+					rs.close();
+				}
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException se2) {
