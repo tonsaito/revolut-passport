@@ -15,6 +15,8 @@ public class DBManagerTest {
 	
 	private static final String WRONG_SQL = "SHOW TABLES@@@";
 	private static final String RIGHT_SQL = "SHOW TABLES";
+	private static final String TABLE_SQL = "CREATE TABLE IF NOT EXISTS TEST1 (id INTEGER AUTO_INCREMENT PRIMARY KEY, value VARCHAR(1))";
+	private static final String DROP_TABLE_SQL = "DROP TABLE IF EXISTS TEST1";
 
 	@Before
 	public void setup() {
@@ -44,11 +46,20 @@ public class DBManagerTest {
 	
 	@Test
 	public void executeUpdateShouldReturnTrue() throws ClassNotFoundException, SQLException{
-		assertTrue(DBManager.execute(RIGHT_SQL));
+		DBManager.executeUpdate(DROP_TABLE_SQL);
+		DBManager.executeUpdate(TABLE_SQL);
+		assertTrue(DBManager.executeUpdate("INSERT INTO TEST1(value) values(1) "));
 	}
 	
 	@Test
 	public void executeUpdateShouldReturnFalse() throws ClassNotFoundException, SQLException{
-		assertFalse(DBManager.execute(WRONG_SQL));
+		assertFalse(DBManager.executeUpdate(WRONG_SQL));
+	}
+	
+	@Test
+	public void executeUpdateReturnKeyShouldReturnKey() throws ClassNotFoundException, SQLException{
+		DBManager.executeUpdate(DROP_TABLE_SQL);
+		DBManager.executeUpdate(TABLE_SQL);
+		assertTrue(DBManager.executeUpdateReturnKey("INSERT INTO TEST1(value) values(1) ") > 0);
 	}
 }

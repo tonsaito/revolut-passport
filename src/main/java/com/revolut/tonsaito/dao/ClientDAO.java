@@ -149,6 +149,7 @@ public class ClientDAO {
 		} catch (SQLException se) {
 			LOGGER.error(se.getMessage(), se.getCause());
 		} catch (Exception e) {
+			System.out.println(e);
 			LOGGER.error(e.getMessage(), e.getCause());
 		} finally {
 			try {
