@@ -5,7 +5,7 @@ This sample code will be my revolut passport to work in a amazing fintech in Lon
 For the usability purposes you can find the built revolut-passport-1.0.jar in the /run-here directory
 
 ```bash
-java -jar /build/libs/revolut-passport.jar
+java -jar ./run-here/revolut-passport-1.0.jar
 ```
 
 ## Info
