@@ -1,6 +1,9 @@
 # My Revolut Passport by Ayrton Saito
 This sample code will be my revolut passport to work in a amazing fintech in London, UK!
 
+## Considerations
+Develop code with heavy frameworks is very easy. I really enjoyed working on this little project. I learned a lot and had a lot of fun!
+
 ## How to run
 For the usability purposes you can find the built revolut-passport-1.0.jar in the /run-here directory
 
@@ -18,6 +21,7 @@ With only a few days to work on this project, I could not make everthing I wante
 
 ```
 - PreparedStatment/Reflection on the DAO classes
+- Commit/rollback transactions controls
 - External configuration (12Factor)
 - ETag validation (concurrency)
 - More tests, as always

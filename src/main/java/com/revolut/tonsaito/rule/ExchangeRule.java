@@ -8,6 +8,8 @@ import com.revolut.tonsaito.model.ClientModel;
 import com.revolut.tonsaito.model.ResponseModel;
 
 public class ExchangeRule {
+	
+	private ExchangeRule() {}
 
 	public static ResponseModel validateMoneyExchange(ClientModel clientFrom, ClientModel clientTo, BigDecimal amount) {
 		if(clientFrom == null || StringUtils.isBlank(clientFrom.getAccount())) {
