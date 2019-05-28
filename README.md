@@ -17,7 +17,6 @@ Static code analysis: https://sonarcloud.io/dashboard?id=tonsaito_revolut-passpo
 With only a few days to work on this project, I could not make everthing I wanted to make this project better, but here are some improvements that I would make:
 
 ```
-- Install the coverage plugin for sonar
 - PreparedStatment/Reflection on the DAO classes
 - External configuration (12Factor)
 - ETag validation (concurrency)

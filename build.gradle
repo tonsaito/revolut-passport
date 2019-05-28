@@ -6,6 +6,13 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'java-library-distribution'
+apply plugin: "jacoco"
+apply plugin: 'org.sonarqube'
+
+jacoco {
+	toolVersion = "0.7.9"
+	reportsDir = file("$buildDir/customJacocoReportDir")
+}
 
 version = '1.0'
 sourceCompatibility = 1.8
