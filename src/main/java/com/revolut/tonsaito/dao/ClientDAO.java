@@ -25,9 +25,18 @@ public class ClientDAO {
 		DBManager.executeUpdate(tableSQL);
 		System.out.println("The Table Client was created successfully!");
 	}
-	public static void insert(String name, String accountNumber, BigDecimal balance) {
-		DBManager.executeUpdate("INSERT INTO CLIENT(name, account_number, account_balance) values('" + name + "','"
-				+ accountNumber + "', '" + balance + "')");
+	
+	public static boolean insert(String name, String accountNumber, BigDecimal balance) {
+		if(getOne(new ClientModel.Builder().withAccount(accountNumber).build()).getId() == null) {
+			DBManager.executeUpdate("INSERT INTO CLIENT(name, account_number, account_balance) values('" + name + "','"
+					+ accountNumber + "', '" + balance + "')");
+			return true;
+		}
+		return false;
+	}
+	
+	public static void deleteByAccountNumber(String accountNumber) {
+		DBManager.executeUpdate("DELETE FROM CLIENT WHERE account_number='"+accountNumber+"'");
 	}
 	
 	public static void exchange(String accountFrom, String accountTo, BigDecimal balance) {

@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.sql.SQLException;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,6 +23,14 @@ public class ClientResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listAll() throws SQLException {
 		return Response.ok(ClientDAO.getAll(null)).build();
+    }
+	
+	@POST
+	@Path("/add")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response add(ClientModel clientModel) throws SQLException {
+		ClientDAO.insert(clientModel.getName(), clientModel.getAccount(), clientModel.getBalance());
+		return Response.ok("OK").build();
     }
 	
 	@GET

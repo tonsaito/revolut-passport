@@ -1,5 +1,6 @@
 ### Java ###
 *.class
+*.log
 
 .gradle
 /build/
@@ -7,3 +8,4 @@
 /build/
 /data
 /tomcat.8080
+/revolut-passport*

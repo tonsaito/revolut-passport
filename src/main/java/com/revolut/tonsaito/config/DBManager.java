@@ -2,6 +2,7 @@ package com.revolut.tonsaito.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -10,7 +11,7 @@ import org.apache.log4j.Logger;
 public class DBManager {
 	private static final Logger LOGGER = Logger.getLogger(DBManager.class);
 	static final String JDBC_DRIVER = "org.h2.Driver";
-	static final String DB_URL = "jdbc:h2:./data/sample";
+	static final String DB_URL = "jdbc:h2:./data/revolut";
 	static final String USER = "sa";
 	static final String PASS = "revolut";
 	static Connection conn = null;
@@ -81,4 +82,34 @@ public class DBManager {
 		return executeReturn;
 	}
 
+	public static Integer executeUpdateReturnKey(String sql) {
+		Statement stmt = null;
+		Integer executeReturn = 0;
+		try {
+			stmt = getConn().createStatement();
+			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+			try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	                executeReturn = generatedKeys.getInt(1);
+	            }
+	            else {
+	                throw new SQLException("Creating entity failed, no ID obtained.");
+	            }
+	        }
+			stmt.close();
+			closeConn();
+		} catch (SQLException se) {
+			LOGGER.error(se.getMessage(), se.getCause());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e.getCause());
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException se2) {
+				LOGGER.error(se2.getMessage(), se2.getCause());
+			}
+		}
+		return executeReturn;
+	}
 }

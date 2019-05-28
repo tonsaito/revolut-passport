@@ -18,7 +18,7 @@ With only a few days to work on this project, I could not make everthing I wante
 
 ```
 - Install the coverage plugin for sonar
-- Reflection on on the DAO classes
+- PreparedStatment/Reflection on the DAO classes
 - External configuration (12Factor)
 - ETag validation (concurrency)
 - More tests, as always

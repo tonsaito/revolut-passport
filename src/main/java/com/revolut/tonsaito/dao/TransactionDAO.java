@@ -27,9 +27,13 @@ public class TransactionDAO {
 		System.out.println("The Table Transaction was created successfully!.");
 	}
 
-	public static void insert(String accountFrom, String accountTo, BigDecimal amount, Timestamp timestamp,
+	public static boolean delete(Integer id) {
+		return DBManager.executeUpdate("DELETE FROM TRANSACTION WHERE id='"+id+"'");
+	}
+
+	public static Integer insert(String accountFrom, String accountTo, BigDecimal amount, Timestamp timestamp,
 			Boolean status, String info) {
-		DBManager.executeUpdate("INSERT INTO TRANSACTION(account_from, account_to, amount, date, status, info) values('"
+		return DBManager.executeUpdateReturnKey("INSERT INTO TRANSACTION(account_from, account_to, amount, date, status, info) values('"
 				+ accountFrom + "','" + accountTo + "', '" + amount + "','" + timestamp + "','" + status + "','" + info
 				+ "')");
 	}
