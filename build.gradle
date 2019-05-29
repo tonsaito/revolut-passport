@@ -38,7 +38,6 @@ dependencies {
 	
 	testCompile group: 'org.glassfish.jersey.test-framework', name: 'jersey-test-framework-core', version: '2.26'
 	testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '2.26'
-	testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
 }
 
 distZip.shouldRunAfter(build)

@@ -4,6 +4,17 @@ This sample code will be my revolut passport to work in a amazing fintech in Lon
 ## Considerations
 Develop code with heavy frameworks is very easy. I really enjoyed working on this little project. I learned a lot and had a lot of fun!
 
+
+## Concepts you will find in this project
+- Embedded Tomcat container
+- Embedded H2 database
+- Jersey to create REST APIs
+- Error Handling Mapper using ExceptionMapper
+- Unit Tests with JUnit
+- Sonarcloud as the static code analyzer
+- Gradle as the dependency manager
+- Log management with Log4j
+
 ## How to run
 For the usability purposes you can find the built revolut-passport-1.0.jar in the /run-here directory
 
@@ -14,6 +25,8 @@ java -jar ./run-here/revolut-passport-1.0.jar
 ## Info
 
 Static code analysis: https://sonarcloud.io/dashboard?id=tonsaito_revolut-passport
+
+
 
 
 ## Future improvements
