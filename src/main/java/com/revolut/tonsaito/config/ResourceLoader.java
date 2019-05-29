@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.revolut.tonsaito.mapper.UncaughtExceptionMapper;
 import com.revolut.tonsaito.resource.ClientResource;
 import com.revolut.tonsaito.resource.ExchangeResource;
 import com.revolut.tonsaito.resource.HealthCheckResource;
@@ -18,6 +19,7 @@ public class ResourceLoader extends Application {
         classes.add(ClientResource.class);
         classes.add(ExchangeResource.class);
         classes.add(HealthCheckResource.class);
+        classes.add(UncaughtExceptionMapper.class);
         return classes;
     }
 }
