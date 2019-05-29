@@ -7,6 +7,7 @@ import javax.ws.rs.core.Application;
 
 import com.revolut.tonsaito.resource.ClientResource;
 import com.revolut.tonsaito.resource.ExchangeResource;
+import com.revolut.tonsaito.resource.HealthCheckResource;
 
 public class ResourceLoader extends Application {
 
@@ -16,6 +17,7 @@ public class ResourceLoader extends Application {
 
         classes.add(ClientResource.class);
         classes.add(ExchangeResource.class);
+        classes.add(HealthCheckResource.class);
         return classes;
     }
 }

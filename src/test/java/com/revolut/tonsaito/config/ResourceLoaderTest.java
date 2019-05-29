@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.revolut.tonsaito.resource.ClientResource;
 import com.revolut.tonsaito.resource.ExchangeResource;
+import com.revolut.tonsaito.resource.HealthCheckResource;
 
 public class ResourceLoaderTest {
 
@@ -16,5 +17,6 @@ public class ResourceLoaderTest {
 		Set<Class<?>> classes = new ResourceLoader().getClasses();
 		assertTrue(classes.contains(ExchangeResource.class));
 		assertTrue(classes.contains(ClientResource.class));
+		assertTrue(classes.contains(HealthCheckResource.class));
 	}
 }

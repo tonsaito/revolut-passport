@@ -16,11 +16,13 @@ import com.revolut.tonsaito.dao.ClientDAO;
 import com.revolut.tonsaito.dao.TransactionDAO;
 
 public class Application {
+	private Tomcat tomcat;
 	
 	public static void main(String[] args) throws LifecycleException, MalformedURLException, ServletException {
 		Application app = new Application();
 		app.initDbConfigurations();
 		app.start();
+		app.awaitServer();
 	}
 
 	public void initDbConfigurations() {
@@ -30,16 +32,31 @@ public class Application {
 	}
 
 	public void start() throws ServletException, LifecycleException, MalformedURLException {
-		Tomcat tomcat = new Tomcat();
-		tomcat.setPort(8080);
+		instanceServer();
+		this.tomcat.setPort(8080);
 
-		Context context = tomcat.addWebapp("/", new File(".").getAbsolutePath());
+		Context context = this.tomcat.addWebapp("/", new File(".").getAbsolutePath());
 
 		Tomcat.addServlet(context, "jersey-container-servlet", resourceConfig());
 		context.addServletMapping("/*", "jersey-container-servlet");
 
-		tomcat.start();
-		tomcat.getServer().await();
+		this.tomcat.start();
+	}
+	
+	public void awaitServer() {
+		if(this.tomcat != null) {
+			this.tomcat.getServer().await();
+		}
+	}
+	
+	public void instanceServer() {
+		if(this.tomcat == null) {
+			this.tomcat = new Tomcat();
+		}
+	}
+	
+	public void stop() throws LifecycleException {
+		this.tomcat.getServer().stop();
 	}
 
 	private ServletContainer resourceConfig() {
