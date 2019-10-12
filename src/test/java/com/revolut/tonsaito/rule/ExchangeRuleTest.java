@@ -21,7 +21,7 @@ public class ExchangeRuleTest {
 		ClientModel clientFrom = null;
 		ClientModel clientTo = new ClientModel.Builder().withAccount("002").build();
 		BigDecimal amount = new BigDecimal(333.00);
-		ResponseModel response = ExchangeRule.validateMoneyExchange(clientFrom, clientTo, amount);
+		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, amount);
 		assertFalse(response.getStatus());
 	}
 	
@@ -30,7 +30,7 @@ public class ExchangeRuleTest {
 		ClientModel clientFrom =  new ClientModel.Builder().withAccount("001").withBalance(new BigDecimal(334.0)).build();
 		ClientModel clientTo = new ClientModel.Builder().withAccount("").build();
 		BigDecimal amount = new BigDecimal(333.00);
-		ResponseModel response = ExchangeRule.validateMoneyExchange(clientFrom, clientTo, amount);
+		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, amount);
 		assertFalse(response.getStatus());
 	}
 	
@@ -39,7 +39,7 @@ public class ExchangeRuleTest {
 		ClientModel clientFrom = new ClientModel.Builder().withAccount("001").withBalance(new BigDecimal(332.0)).build();
 		ClientModel clientTo = new ClientModel.Builder().withAccount("002").build();
 		BigDecimal amount = new BigDecimal(333.00);
-		ResponseModel response = ExchangeRule.validateMoneyExchange(clientFrom, clientTo, amount);
+		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, amount);
 		assertFalse(response.getStatus());
 	}
 	
@@ -48,7 +48,7 @@ public class ExchangeRuleTest {
 		ClientModel clientFrom = new ClientModel.Builder().withAccount("001").withBalance(new BigDecimal(332.0)).build();
 		ClientModel clientTo = new ClientModel.Builder().withAccount("002").build();
 		BigDecimal amount = new BigDecimal(0.0);
-		ResponseModel response = ExchangeRule.validateMoneyExchange(clientFrom, clientTo, amount);
+		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, amount);
 		assertFalse(response.getStatus());
 	}
 	
@@ -57,7 +57,7 @@ public class ExchangeRuleTest {
 		ClientModel clientFrom = new ClientModel.Builder().withAccount("001").withBalance(new BigDecimal(334.0)).build();
 		ClientModel clientTo = new ClientModel.Builder().withAccount("002").build();
 		BigDecimal amount = new BigDecimal(333.00);
-		ResponseModel response = ExchangeRule.validateMoneyExchange(clientFrom, clientTo, amount);
+		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, amount);
 		assertTrue(response.getStatus());
 	}
 }

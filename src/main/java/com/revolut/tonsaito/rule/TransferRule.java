@@ -7,11 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 import com.revolut.tonsaito.model.ClientModel;
 import com.revolut.tonsaito.model.ResponseModel;
 
-public class ExchangeRule {
+public class TransferRule {
 	
-	private ExchangeRule() {}
+	private TransferRule() {}
 
-	public static ResponseModel validateMoneyExchange(ClientModel clientFrom, ClientModel clientTo, BigDecimal amount) {
+	public static ResponseModel validateTransfer(ClientModel clientFrom, ClientModel clientTo, BigDecimal amount) {
 		if(clientFrom == null || StringUtils.isBlank(clientFrom.getAccount())) {
 			return new ResponseModel.Builder().withStatus(false).withMessage("Invalid client FROM Account").build();
 		}

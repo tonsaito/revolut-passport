@@ -16,25 +16,25 @@ import com.revolut.tonsaito.dao.TransactionDAO;
 import com.revolut.tonsaito.model.ClientModel;
 import com.revolut.tonsaito.model.ExchangeModel;
 import com.revolut.tonsaito.model.ResponseModel;
-import com.revolut.tonsaito.rule.ExchangeRule;
+import com.revolut.tonsaito.rule.TransferRule;
 
-@Path("/exchange")
-public class ExchangeResource {
+@Path("/transfer")
+public class TransferResource {
 
 	@GET
-	@Path("/history")
+	@Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response history() throws SQLException {
 		return Response.ok(TransactionDAO.getAll()).build();
     }
 	
 	@POST
-	@Path("/money")
-    @Produces(MediaType.TEXT_PLAIN)
+	@Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response exchangeMoney(ExchangeModel model) throws SQLException {
 		ClientModel clientFrom = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountFrom()).build());
 		ClientModel clientTo = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountTo()).build());
-		ResponseModel response = ExchangeRule.validateMoneyExchange(clientFrom, clientTo, model.getAmount());
+		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, model.getAmount());
 		if(response.getStatus()) {
 			ClientDAO.exchange(model.getAccountFrom(), model.getAccountTo(), model.getAmount());
 			TransactionDAO.insert(model.getAccountFrom(), model.getAccountTo(), model.getAmount(), new Timestamp(System.currentTimeMillis()), true, "");

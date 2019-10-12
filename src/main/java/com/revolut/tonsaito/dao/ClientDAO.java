@@ -27,7 +27,7 @@ public class ClientDAO {
 	}
 	
 	public static boolean insert(String name, String accountNumber, BigDecimal balance) {
-		if(getOne(new ClientModel.Builder().withAccount(accountNumber).build()).getId() == null) {
+		if(getOne(new ClientModel.Builder().withAccount(accountNumber).build()) == null) {
 			DBManager.executeUpdate("INSERT INTO CLIENT(name, account_number, account_balance) values('" + name + "','"
 					+ accountNumber + "', '" + balance + "')");
 			return true;
@@ -87,7 +87,7 @@ public class ClientDAO {
 	}
 	
 	public static ClientModel getOne(ClientModel clientModel){
-		ClientModel clientModelReturn = new ClientModel();
+		ClientModel clientModelReturn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		StringBuilder sql = new StringBuilder("select * from CLIENT WHERE 1=1");

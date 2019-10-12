@@ -26,7 +26,7 @@ public class ExchangeResourceTest extends JerseyTest{
 	
     @Override
     protected Application configure() {
-        return new ResourceConfig(ExchangeResource.class);
+        return new ResourceConfig(TransferResource.class);
     }
     
     @Test

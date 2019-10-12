@@ -8,12 +8,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.revolut.tonsaito.model.ResponseModel;
+
 @Path("/healthcheck")
 public class HealthCheckResource {
 	
 	@GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listAll() throws SQLException {
-		return Response.ok("HEALTHCHECKSTATUSOK").build();
+		return Response.ok(new ResponseModel(true, "UP")).build();
     }
 }
