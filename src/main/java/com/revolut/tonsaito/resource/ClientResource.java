@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.SQLException;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -29,8 +30,12 @@ public class ClientResource {
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response add(ClientModel clientModel) throws SQLException {
-		ClientDAO.insert(clientModel.getName(), clientModel.getAccount(), clientModel.getBalance());
-		return Response.status(Status.CREATED).build();
+		ClientModel insertedClientModel = ClientDAO.insert(clientModel.getName(), clientModel.getAccount(), clientModel.getBalance());
+		if(insertedClientModel != null) {
+			return Response.status(Status.CREATED).entity(clientModel).build();
+		} else {
+			throw new BadRequestException(String.format("Could not complete the operation. Please, check your request."));
+		}
     }
 	
 	@GET

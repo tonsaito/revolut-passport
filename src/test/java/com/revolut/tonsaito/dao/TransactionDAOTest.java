@@ -17,14 +17,6 @@ public class TransactionDAOTest {
 	}
 	
 	@Test
-	public void shouldCountWithoutErrors() {
-		Integer transactionId = TransactionDAO.insert(ACCOUNT_TEST_NUMBER_0, ACCOUNT_TEST_NUMBER_1, BigDecimal.valueOf(100.0), new Timestamp(System.currentTimeMillis()), true, "");
-		Integer count = TransactionDAO.count();
-		TransactionDAO.delete(transactionId);
-		assertTrue(count>0);
-	}
-	
-	@Test
 	public void shouldInsertWithoutErrors() {
 		Integer transactionId = TransactionDAO.insert(ACCOUNT_TEST_NUMBER_0, ACCOUNT_TEST_NUMBER_1, BigDecimal.valueOf(100.0), new Timestamp(System.currentTimeMillis()), true, "");
 		TransactionDAO.delete(transactionId);

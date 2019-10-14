@@ -1,6 +1,8 @@
 package com.revolut.tonsaito.dao;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,91 +17,96 @@ import com.revolut.tonsaito.model.TransactionModel;
 
 public class TransactionDAO {
 	private static final Logger LOGGER = Logger.getLogger(TransactionDAO.class);
-	public static final String tableSQL = "CREATE TABLE IF NOT EXISTS TRANSACTION "
+	public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS TRANSACTION "
 			+ "(id INTEGER AUTO_INCREMENT PRIMARY KEY, " + " account_from VARCHAR(255), "
 			+ " account_to VARCHAR(255), amount DOUBLE, date TIMESTAMP, status BOOLEAN, info VARCHAR(255) NULL)";
+	private static final String SQL_SELECT_ALL_BY_DATE = "select * from TRANSACTION order by date DESC";
+	private static final String SQL_INSERT = "INSERT INTO TRANSACTION(account_from, account_to, amount, date, status, info) values(?,?,?,?,?,?)";
+	private static final String SQL_DELETE_BY_ID = "DELETE FROM TRANSACTION WHERE id=?";
 
 	private TransactionDAO() {
 	}
 
 	public static void createEntity() {
-		DBManager.executeUpdate(tableSQL);
+		DBManager.executeUpdate(SQL_CREATE_TABLE);
 		System.out.println("The Table Transaction was created successfully!.");
-	}
-
-	public static boolean delete(Integer id) {
-		return DBManager.executeUpdate("DELETE FROM TRANSACTION WHERE id='"+id+"'");
-	}
-
-	public static Integer insert(String accountFrom, String accountTo, BigDecimal amount, Timestamp timestamp,
-			Boolean status, String info) {
-		return DBManager.executeUpdateReturnKey("INSERT INTO TRANSACTION(account_from, account_to, amount, date, status, info) values('"
-				+ accountFrom + "','" + accountTo + "', '" + amount + "','" + timestamp + "','" + status + "','" + info
-				+ "')");
-	}
-
-	public static int count() {
-		String sql = "select count(*) from TRANSACTION";
-		int count = 0;
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = DBManager.getConn().createStatement();
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				count = rs.getInt(1);
-			}
-			rs.close();
-		} catch (SQLException se) {
-			LOGGER.error(se.getMessage(), se.getCause());
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e.getCause());
-		} finally {
-			try {
-				if (rs != null) rs.close();
-			} catch (SQLException se2) {
-				LOGGER.error(se2.getMessage(), se2.getCause());
-			}
-			try {
-				if (stmt != null) stmt.close();
-			} catch (SQLException se2) {
-				LOGGER.error(se2.getMessage(), se2.getCause());
-			}
-		}
-		return count;
 	}
 
 	public static List<TransactionModel> getAll() {
 		List<TransactionModel> list = new ArrayList<TransactionModel>();
-		String sql = "select * from TRANSACTION";
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = DBManager.getConn().createStatement();
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				list.add(new TransactionModel(rs.getInt("id"), rs.getString("account_from"), rs.getString("account_to"),
-						rs.getBigDecimal("amount"), rs.getTimestamp("date"), rs.getBoolean("status"),
-						rs.getString("info")));
+		try (Connection conn = DBManager.getConn();
+				Statement statement = conn.createStatement();
+				PreparedStatement ps = conn.prepareStatement(SQL_SELECT_ALL_BY_DATE);) {
+			conn.setAutoCommit(false);
+
+			try (ResultSet rs = ps.executeQuery();) {
+				while (rs.next()) {
+					list.add(new TransactionModel(rs.getInt("id"), rs.getString("account_from"),
+							rs.getString("account_to"), rs.getBigDecimal("amount"), rs.getTimestamp("date"),
+							rs.getBoolean("status"), rs.getString("info")));
+				}
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e.getCause());
 			}
-			rs.close();
-		} catch (SQLException se) {
-			LOGGER.error(se.getMessage(), se.getCause());
+
+			conn.commit();
+			conn.setAutoCommit(true);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e.getCause());
-		} finally {
-			try {
-				if (rs != null) rs.close();
-			} catch (SQLException se2) {
-				LOGGER.error(se2.getMessage(), se2.getCause());
-			}
-			try {
-				if (stmt != null) stmt.close();
-			} catch (SQLException se2) {
-				LOGGER.error(se2.getMessage(), se2.getCause());
-			}
 		}
 		return list;
+	}
+
+	public static Integer insert(String accountFrom, String accountTo, BigDecimal amount, Timestamp timestamp,
+			Boolean status, String info) {
+		Integer id = 0;
+		try (Connection conn = DBManager.getConn();
+				Statement statement = conn.createStatement();
+				PreparedStatement ps = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);) {
+			conn.setAutoCommit(false);
+
+			ps.setString(1, accountFrom);
+			ps.setString(2, accountTo);
+			ps.setBigDecimal(3, amount);
+			ps.setTimestamp(4, timestamp);
+			ps.setBoolean(5, status);
+			ps.setString(6, info);
+
+			ps.execute();
+			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					id = generatedKeys.getInt(1);
+				} else {
+					throw new SQLException("Creating entity failed, no ID obtained.");
+				}
+			}
+
+			conn.commit();
+			conn.setAutoCommit(true);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e.getCause());
+		}
+
+		return id;
+	}
+
+	public static boolean delete(Integer id) {
+		int count = 0;
+		try (Connection conn = DBManager.getConn();
+				Statement statement = conn.createStatement();
+				PreparedStatement ps = conn.prepareStatement(SQL_DELETE_BY_ID);) {
+			conn.setAutoCommit(false);
+
+			ps.setInt(1, id);
+			count = ps.executeUpdate();
+
+			conn.commit();
+			conn.setAutoCommit(true);
+
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e.getCause());
+		}
+		return (count > 0);
 	}
 
 }

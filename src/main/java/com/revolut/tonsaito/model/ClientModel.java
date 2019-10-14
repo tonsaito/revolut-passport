@@ -19,6 +19,7 @@ public class ClientModel {
 	}
 
 	private ClientModel(Builder builder) {
+		this.id = builder.id;
 		this.name = builder.name;
 		this.account = builder.account;
 		this.balance = builder.balance;
@@ -57,11 +58,17 @@ public class ClientModel {
 	}
 	
 	public static class Builder{
+		private Integer id;
 		private String name;
 		private String account;
 		private BigDecimal balance;
 		
 		public Builder() {
+		}
+		
+		public Builder withId(Integer id) {
+			this.id = id;
+			return this;
 		}
 		
 		public Builder withName(String name) {

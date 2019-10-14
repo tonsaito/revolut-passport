@@ -22,26 +22,24 @@ import com.revolut.tonsaito.rule.TransferRule;
 public class TransferResource {
 
 	@GET
-	@Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response history() throws SQLException {
 		return Response.ok(TransactionDAO.getAll()).build();
     }
 	
 	@POST
-	@Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response exchangeMoney(ExchangeModel model) throws SQLException {
 		ClientModel clientFrom = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountFrom()).build());
 		ClientModel clientTo = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountTo()).build());
 		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, model.getAmount());
 		if(response.getStatus()) {
-			ClientDAO.exchange(model.getAccountFrom(), model.getAccountTo(), model.getAmount());
+			ClientDAO.transfer(model.getAccountFrom(), model.getAccountTo(), model.getAmount());
 			TransactionDAO.insert(model.getAccountFrom(), model.getAccountTo(), model.getAmount(), new Timestamp(System.currentTimeMillis()), true, "");
-			return Response.ok(response.getMessage()).build();
+			return Response.ok(new ResponseModel(true, response.getMessage())).build();
 		} else {
 			TransactionDAO.insert(model.getAccountFrom(), model.getAccountTo(), model.getAmount(), new Timestamp(System.currentTimeMillis()), false, response.getMessage());
-			return Response.status(Status.BAD_REQUEST).entity(response.getMessage()).build();
+			return Response.status(Status.BAD_REQUEST).entity(new ResponseModel(false, response.getMessage())).build();
 		}
     }
 }
