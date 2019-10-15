@@ -2,7 +2,7 @@ package com.revolut.tonsaito.model;
 
 import java.math.BigDecimal;
 
-public class ExchangeModel {
+public class TransferModel {
 	private String accountFrom;
 	private String accountTo;
 	private BigDecimal amount;

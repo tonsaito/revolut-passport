@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -25,6 +26,7 @@ public class ClientDAO {
 	private static final String SQL_COUNT = "select count(*) from CLIENT";
 	private static final String SQL_SELECT_ALL = "select * from CLIENT WHERE 1=1 ";
 	private static final String SQL_INSERT = "INSERT INTO CLIENT(name, account_number, account_balance) values(?,?,?)";
+	private static final String SQL_UPDATE_BALANCE = "UPDATE CLIENT SET account_balance = ? WHERE id = ?";
 	private static final String SQL_UPDATE_ADD = "UPDATE CLIENT SET account_balance = account_balance + ? WHERE account_number = ?";
 	private static final String SQL_UPDATE_SUBTRACT = "UPDATE CLIENT SET account_balance = account_balance - ? WHERE account_number = ?";
 	private static final String SQL_DELETE_BY_ID = "DELETE FROM CLIENT WHERE account_number=?";
@@ -90,8 +92,32 @@ public class ClientDAO {
 		}
 		return (count > 0);
 	}
+	
+	public static void updateClientsBalance(ClientModel clientFrom, ClientModel clientTo) {
+		try (Connection conn = DBManager.getConn();
+				Statement statement = conn.createStatement();
+				PreparedStatement psSubtract = conn.prepareStatement(SQL_UPDATE_BALANCE);
+				PreparedStatement psAdd = conn.prepareStatement(SQL_UPDATE_BALANCE);) {
+			conn.setAutoCommit(false);
 
-	public static void transfer(String accountFrom, String accountTo, BigDecimal balance) {
+			psSubtract.setBigDecimal(1, clientFrom.getBalance());
+			psSubtract.setInt(2, clientFrom.getId());
+			psSubtract.execute();
+
+			psAdd.setBigDecimal(1, clientTo.getBalance());
+			psAdd.setInt(2, clientTo.getId());
+			psAdd.execute();
+
+			conn.commit();
+			conn.setAutoCommit(true);
+
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e.getCause());
+			throw new InternalServerErrorException(String.format("Something wrong happened. Please, try again"));
+		}
+	}
+
+	public static void transferByAccountNumber(String accountFrom, String accountTo, BigDecimal balance) {
 		try (Connection conn = DBManager.getConn();
 				Statement statement = conn.createStatement();
 				PreparedStatement psSubtract = conn.prepareStatement(SQL_UPDATE_SUBTRACT);

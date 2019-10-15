@@ -6,11 +6,12 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 import com.revolut.tonsaito.mapper.BadRequestExceptionMapper;
+import com.revolut.tonsaito.mapper.InternalServerErrorExceptionMapper;
 import com.revolut.tonsaito.mapper.NotFoundExceptionMapper;
 import com.revolut.tonsaito.mapper.UncaughtExceptionMapper;
 import com.revolut.tonsaito.resource.ClientResource;
-import com.revolut.tonsaito.resource.TransferResource;
 import com.revolut.tonsaito.resource.HealthCheckResource;
+import com.revolut.tonsaito.resource.TransferResource;
 
 public class ResourceLoader extends Application {
 
@@ -24,6 +25,7 @@ public class ResourceLoader extends Application {
         classes.add(NotFoundExceptionMapper.class);
         classes.add(UncaughtExceptionMapper.class);
         classes.add(BadRequestExceptionMapper.class);
+        classes.add(InternalServerErrorExceptionMapper.class);
         return classes;
     }
 }

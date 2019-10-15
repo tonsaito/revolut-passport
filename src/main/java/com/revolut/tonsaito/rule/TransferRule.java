@@ -27,6 +27,6 @@ public class TransferRule {
 		if(amount.compareTo(BigDecimal.ZERO) <= 0) {
 			return new ResponseModel.Builder().withStatus(false).withMessage("Invalid amount of money").build();
 		}
-		return new ResponseModel.Builder().withStatus(true).withMessage("Money Exchange successfully completed!").build();
+		return new ResponseModel.Builder().withStatus(true).withMessage("Money Transfer successfully completed!").build();
 	}
 }

@@ -57,6 +57,18 @@ public class ClientModel {
 		this.balance = balance;
 	}
 	
+	public void addBalance(BigDecimal amount) {
+		if(amount.compareTo(BigDecimal.ZERO) > 0) {
+			this.balance = this.balance.add(amount);
+		}
+	}
+	
+	public void substractBalance(BigDecimal amount) {
+		if(amount.compareTo(BigDecimal.ZERO) > 0) {
+			this.balance = this.balance.subtract(amount);
+		}
+	}
+	
 	public static class Builder{
 		private Integer id;
 		private String name;
