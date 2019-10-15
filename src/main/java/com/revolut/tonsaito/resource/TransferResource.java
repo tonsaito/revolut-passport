@@ -14,8 +14,8 @@ import javax.ws.rs.core.Response.Status;
 import com.revolut.tonsaito.dao.ClientDAO;
 import com.revolut.tonsaito.dao.TransactionDAO;
 import com.revolut.tonsaito.model.ClientModel;
-import com.revolut.tonsaito.model.TransferModel;
 import com.revolut.tonsaito.model.ResponseModel;
+import com.revolut.tonsaito.model.TransferModel;
 import com.revolut.tonsaito.rule.TransferRule;
 
 @Path("/transfer")
@@ -33,6 +33,9 @@ public class TransferResource {
 		ClientModel clientFrom = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountFrom()).build());
 		ClientModel clientTo = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountTo()).build());
 		ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, model.getAmount());
+		
+		
+		
 		if(response.getStatus()) {
 			clientFrom.substractBalance(model.getAmount());
 			clientTo.addBalance(model.getAmount());
