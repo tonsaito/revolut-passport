@@ -1,9 +1,11 @@
 package com.revolut.tonsaito.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -21,25 +23,19 @@ public class ClientDAOTest {
 	
 	@Test
 	public void shouldInsertWithoutErrors() {
-//		assertTrue(ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_0, BigDecimal.valueOf(0.0)));
-//		ClientDAO.deleteByAccountNumber(ACCOUNT_TEST_NUMBER_0);
+		String account = generateAccount(1);
+		ClientModel clientModel = ClientDAO.insert(TEST, account, BigDecimal.valueOf(0.0));
+		ClientDAO.deleteByAccountNumber(account);
+		assertEquals(account, clientModel.getAccount());
 	}
 	
 	@Test
 	public void shouldDeleteWithoutErrors() {
-		ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_0, BigDecimal.valueOf(0.0));
-		ClientDAO.deleteByAccountNumber(ACCOUNT_TEST_NUMBER_0);
-	}
-	
-	@Test
-	public void shouldExchangeWithoutErrors() {
-		ClientDAO.deleteByAccountNumber(ACCOUNT_TEST_NUMBER_0);
-		ClientDAO.deleteByAccountNumber(ACCOUNT_TEST_NUMBER_1);
-		ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_0, BigDecimal.valueOf(100.0));
-		ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_1, BigDecimal.valueOf(200.0));
-		ClientDAO.transfer(ACCOUNT_TEST_NUMBER_0, ACCOUNT_TEST_NUMBER_1, BigDecimal.valueOf(50.0));
-		assertEquals(BigDecimal.valueOf(50.0), ClientDAO.getOne(new ClientModel.Builder().withAccount(ACCOUNT_TEST_NUMBER_0).build()).getBalance());
-		assertEquals(BigDecimal.valueOf(250.0), ClientDAO.getOne(new ClientModel.Builder().withAccount(ACCOUNT_TEST_NUMBER_1).build()).getBalance());
+		String account = generateAccount(2);
+		ClientDAO.insert(TEST, account, BigDecimal.valueOf(0.0));
+		ClientDAO.deleteByAccountNumber(account);
+		ClientModel clientModel = ClientDAO.getOne(new ClientModel.Builder().withAccount(account).build());
+		assertNull(clientModel);
 	}
 	
 	@Test
@@ -49,21 +45,43 @@ public class ClientDAOTest {
 	
 	@Test
 	public void shouldCountWithoutErrors() {
+		String account = generateAccount(3);
+		ClientDAO.insert(TEST, account, BigDecimal.valueOf(0.0));
 		assertTrue(ClientDAO.count()>0);
+		ClientDAO.deleteByAccountNumber(account);
 	}
 	
 	@Test
 	public void shouldGetOneWithoutErrors() {
-		ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_0, BigDecimal.valueOf(0.0));
-		assertTrue(ClientDAO.getOne(new ClientModel.Builder().withAccount(ACCOUNT_TEST_NUMBER_0).build()).getName().equals(TEST));
-		ClientDAO.deleteByAccountNumber(ACCOUNT_TEST_NUMBER_0);
+		String account = generateAccount(4);
+		ClientDAO.insert(TEST, account, BigDecimal.valueOf(0.0));
+		assertTrue(ClientDAO.getOne(new ClientModel.Builder().withAccount(account).build()).getName().equals(TEST));
+		ClientDAO.deleteByAccountNumber(account);
 	}
 	
 	@Test
 	public void shouldGetAllWithoutErrors() {
-		ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_0, BigDecimal.valueOf(0.0));
-		assertTrue(ClientDAO.getAll(new ClientModel.Builder().withAccount(ACCOUNT_TEST_NUMBER_0).build()).size() > 0);
+		String account = generateAccount(5);
+		ClientDAO.insert(TEST, account, BigDecimal.valueOf(0.0));
+		assertTrue(ClientDAO.getAll(new ClientModel.Builder().withAccount(account).build()).size() > 0);
+		ClientDAO.deleteByAccountNumber(account);
+	}
+	
+	private String generateAccount(Integer param) {
+		return Long.toString(new Date().getTime())+param;
+	}
+	
+	@Test
+	public void shouldExchangeWithoutErrors() {
 		ClientDAO.deleteByAccountNumber(ACCOUNT_TEST_NUMBER_0);
+		ClientDAO.deleteByAccountNumber(ACCOUNT_TEST_NUMBER_1);
+		ClientModel accountFrom = ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_0, BigDecimal.valueOf(100.0));
+		ClientModel accountTo = ClientDAO.insert(TEST, ACCOUNT_TEST_NUMBER_1, BigDecimal.valueOf(200.0));
+		accountFrom.substractBalance(new BigDecimal(50.0));
+		accountTo.addBalance(new BigDecimal(50.0));
+		ClientDAO.updateClientsBalance(accountFrom, accountTo);
+		assertEquals(BigDecimal.valueOf(50.0), ClientDAO.getOne(new ClientModel.Builder().withAccount(ACCOUNT_TEST_NUMBER_0).build()).getBalance());
+		assertEquals(BigDecimal.valueOf(250.0), ClientDAO.getOne(new ClientModel.Builder().withAccount(ACCOUNT_TEST_NUMBER_1).build()).getBalance());
 	}
 	
 }

@@ -3,7 +3,6 @@ package com.revolut.tonsaito.config;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
@@ -29,12 +28,6 @@ public class DBManagerTest {
 	}
 	
 	@Test
-	public void closeConnShouldCloseTheConnection() throws ClassNotFoundException, SQLException{
-//		DBManager.closeConn();
-//		assertNull(DBManager.conn);
-	}
-	
-	@Test
 	public void executeShouldReturnTrue() throws ClassNotFoundException, SQLException{
 		assertTrue(DBManager.execute(RIGHT_SQL));
 	}
@@ -54,12 +47,5 @@ public class DBManagerTest {
 	@Test
 	public void executeUpdateShouldReturnFalse() throws ClassNotFoundException, SQLException{
 		assertFalse(DBManager.executeUpdate(WRONG_SQL));
-	}
-	
-	@Test
-	public void executeUpdateReturnKeyShouldReturnKey() throws ClassNotFoundException, SQLException{
-		DBManager.executeUpdate(DROP_TABLE_SQL);
-		DBManager.executeUpdate(TABLE_SQL);
-		assertTrue(DBManager.executeUpdateReturnId("INSERT INTO TEST1(value) values(1) ") > 0);
 	}
 }

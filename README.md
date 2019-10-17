@@ -8,7 +8,9 @@ Develop code with heavy frameworks is very easy. I really enjoyed working on thi
 ## Concepts you will find in this project
 - Embedded Tomcat container
 - Embedded H2 database
+- PreparedStatment on the DAO classes
 - Jersey to create REST APIs
+- Concurrency management with jkeylockmanager
 - Error Handling Mapper using ExceptionMapper
 - Unit Tests with JUnit
 - Sonarcloud as the static code analyzer
@@ -33,8 +35,6 @@ Static code analysis: https://sonarcloud.io/dashboard?id=tonsaito_revolut-passpo
 With only a few days to work on this project, I could not make everthing I wanted to make this project better, but here are some improvements that I would make:
 
 ```
-- PreparedStatment/Reflection on the DAO classes
-- Commit/rollback transactions controls
 - External configuration (12Factor)
 - ETag validation (concurrency)
 - More tests, as always
@@ -43,7 +43,7 @@ With only a few days to work on this project, I could not make everthing I wante
 
 ## Usage
 
-#### GET http://localhost:8080/client/all
+#### GET http://localhost:8080/clients
 
 **Sample Response**
 
@@ -81,9 +81,23 @@ With only a few days to work on this project, I could not make everthing I wante
     }
 ]
 ```
+
+#### GET http://localhost:8080/clients/account/{accountId}
+
+**Sample Response**
+
+```
+{
+	"account": "001",
+	"balance": 1000000,
+	"id": 1,
+	"name": "Tony Stark"
+}
+```
+
 ___
 
-#### POST http://localhost:8080/exchange/money
+#### POST http://localhost:8080/transfer
 
 **Body**
 ```
@@ -107,7 +121,7 @@ ___
 
 ___
 
-#### GET http://localhost:8080/exchange/history
+#### GET http://localhost:8080/transfer
 ```
 [
     {

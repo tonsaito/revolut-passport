@@ -33,5 +33,4 @@ public class TransactionDAOTest {
 	public void shouldGetAllWithoutErrors() {
 		assertTrue(TransactionDAO.getAll().size() >= 0);
 	}
-
 }

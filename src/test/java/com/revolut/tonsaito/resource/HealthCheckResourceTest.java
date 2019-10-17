@@ -17,7 +17,7 @@ public class HealthCheckResourceTest extends JerseyTest {
 
 	@Test
 	public void shouldCallHealthCheckStatusWithoutError() {
-		assertEquals("HEALTHCHECKSTATUSOK", target("healthcheck").request().get(String.class));
+		assertEquals("{\"message\":\"UP\",\"status\":true}", target("healthcheck").request().get(String.class));
 	}
 
 }

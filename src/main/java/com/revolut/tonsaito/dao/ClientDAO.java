@@ -27,8 +27,6 @@ public class ClientDAO {
 	private static final String SQL_SELECT_ALL = "select * from CLIENT WHERE 1=1 ";
 	private static final String SQL_INSERT = "INSERT INTO CLIENT(name, account_number, account_balance) values(?,?,?)";
 	private static final String SQL_UPDATE_BALANCE = "UPDATE CLIENT SET account_balance = ? WHERE id = ?";
-	private static final String SQL_UPDATE_ADD = "UPDATE CLIENT SET account_balance = account_balance + ? WHERE account_number = ?";
-	private static final String SQL_UPDATE_SUBTRACT = "UPDATE CLIENT SET account_balance = account_balance - ? WHERE account_number = ?";
 	private static final String SQL_DELETE_BY_ID = "DELETE FROM CLIENT WHERE account_number=?";
 
 	private ClientDAO() {
@@ -117,28 +115,6 @@ public class ClientDAO {
 		}
 	}
 
-	public static void transferByAccountNumber(String accountFrom, String accountTo, BigDecimal balance) {
-		try (Connection conn = DBManager.getConn();
-				Statement statement = conn.createStatement();
-				PreparedStatement psSubtract = conn.prepareStatement(SQL_UPDATE_SUBTRACT);
-				PreparedStatement psAdd = conn.prepareStatement(SQL_UPDATE_ADD);) {
-			conn.setAutoCommit(false);
-
-			psSubtract.setBigDecimal(1, balance);
-			psSubtract.setString(2, accountFrom);
-			psSubtract.execute();
-
-			psAdd.setBigDecimal(1, balance);
-			psAdd.setString(2, accountTo);
-			psAdd.execute();
-
-			conn.commit();
-			conn.setAutoCommit(true);
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e.getCause());
-		}
-	}
 
 	public static void generateData() {
 		if (ClientDAO.count() == 0) {

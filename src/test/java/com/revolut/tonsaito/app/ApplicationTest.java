@@ -29,6 +29,6 @@ public class ApplicationTest extends JerseyTest{
 		response = target("healthcheck").request().get(String.class);
 	    Thread.sleep(5000);
 		application.stop();
-		assertTrue(response.equals("HEALTHCHECKSTATUSOK"));
+		assertTrue(response.equals("{\"message\":\"UP\",\"status\":true}"));
 	}
 }
