@@ -34,7 +34,7 @@ public class ClientResource {
 		ClientRule.validateClientModel(clientModel);
 		ClientModel insertedClientModel = ClientDAO.insert(clientModel.getName(), clientModel.getAccount(), clientModel.getBalance());
 		if(insertedClientModel != null) {
-			return Response.status(Status.CREATED).entity(clientModel).build();
+			return Response.status(Status.CREATED).entity(insertedClientModel).build();
 		} else {
 			throw new BadRequestException(String.format("Could not complete the operation. Please, check your request."));
 		}
