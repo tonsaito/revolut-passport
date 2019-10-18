@@ -38,6 +38,7 @@ public class TransferResource {
 		TransferRule.validateTransferModel(model);
 		ClientModel clientFrom = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountFrom()).build());
 		ClientModel clientTo = ClientDAO.getOne(new ClientModel.Builder().withAccount(model.getAccountTo()).build());
+		TransferRule.validateAccounts(clientFrom, clientTo);
 		return lockManager.executeLocked(clientFrom.getId() + "/" + clientTo.getId(), () -> {
 			ResponseModel response = TransferRule.validateTransfer(clientFrom, clientTo, model.getAmount());
 			if (response.getStatus()) {
