@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.revolut.tonsaito.dao.ClientDAO;
 import com.revolut.tonsaito.model.ClientModel;
+import com.revolut.tonsaito.rule.ClientRule;
 
 @Path("/clients")
 public class ClientResource {
@@ -30,6 +31,7 @@ public class ClientResource {
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response add(ClientModel clientModel) throws SQLException {
+		ClientRule.validateClientModel(clientModel);
 		ClientModel insertedClientModel = ClientDAO.insert(clientModel.getName(), clientModel.getAccount(), clientModel.getBalance());
 		if(insertedClientModel != null) {
 			return Response.status(Status.CREATED).entity(clientModel).build();

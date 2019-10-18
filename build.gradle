@@ -1,5 +1,5 @@
 plugins {
-  id "org.sonarqube" version "2.7"
+  id "org.sonarqube" version "2.7.1"
 }
 
 apply plugin: 'java'
@@ -55,6 +55,7 @@ dependencies {
 	testCompile group: 'org.glassfish.jersey.test-framework', name: 'jersey-test-framework-core', version: '2.26'
 	testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '2.26'
 }
+
 
 distZip.shouldRunAfter(build)
 

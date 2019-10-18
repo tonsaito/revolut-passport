@@ -26,7 +26,7 @@ java -jar ./run-here/revolut-passport-1.0.jar
 
 ## Info
 
-Static code analysis: https://sonarcloud.io/dashboard?id=tonsaito_revolut-passport
+Static code analysis: https://sonarcloud.io/dashboard?id=revolut-passport
 
 
 
