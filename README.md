@@ -36,7 +36,6 @@ With only a few days to work on this project, I could not make everthing I wante
 
 ```
 - External configuration (12Factor)
-- ETag validation (concurrency)
 - More tests, as always
 - JMeter Test (To validate concurrency and stress test)
 ```
